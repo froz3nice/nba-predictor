@@ -1,14 +1,17 @@
 package com.opop.brazius.nbapredictor
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.AdListener
+import com.opop.brazius.nbapredictor.R.id.adView
+import androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior.setTag
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,13 +24,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        MobileAds.initialize(this, getString(R.string.ad_id))
-        MobileAds.initialize(this,getString(R.string.ad_interstitial))
-        mAdView = findViewById<AdView>(R.id.adView)
+        MobileAds.initialize(this, getString(R.string.appId))
+        mAdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder()
                 .build()
 
         mAdView?.loadAd(adRequest)
+
         mInterstitialAd = InterstitialAd(this)
         mInterstitialAd.adUnitId = getString(R.string.ad_interstitial)
         mInterstitialAd.loadAd(AdRequest.Builder().build())

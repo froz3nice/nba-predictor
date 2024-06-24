@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_left"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/mid"
+        android:clickable="true"
+        android:visibility="invisible"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        app:srcCompat="@drawable/bulls" />
+
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/iv_left"
+        app:srcCompat="@drawable/cavs" />
+
+    <View
+        android:id="@+id/mid"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/iv_right"
+        android:textSize="36sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tv_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="invisible"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_toStartOf="@+id/iv_left"
+        android:textSize="36sp" />
+
+    <ImageView
+        android:id="@+id/iv_champ"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/iv_left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/heat" />
+
+    <TextView
+        android:id="@+id/tv_champ"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/iv_left"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toStartOf="@id/iv_champ"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/iv_rate"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/tv_rate"
+        android:layout_toEndOf="@+id/iv_champ"
+        android:layout_marginStart="50dp"
+        android:visibility="invisible"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/rate_press" />
+
+    <ImageView
+        android:id="@+id/iv_share"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/iv_rate"
+        android:layout_toEndOf="@+id/iv_rate"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/share_press"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tv_rate"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_champ"
+        android:layout_toEndOf="@+id/iv_right"
+        android:visibility="invisible"
+        android:gravity="center"
+        android:text="Rate app"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tv_share"
+        android:layout_width="77dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_share"
+        android:layout_alignStart="@+id/iv_share"
+        android:gravity="center"
+        android:text="Share predictions"
+        android:textColor="@android:color/black"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_rate"
+        android:layout_toEndOf="@+id/iv_right"
+        android:visibility="invisible"
+        android:text="If you enjoyed the app click on the ad to support developer ;)"
+        android:textSize="11sp" />
+
+</RelativeLayout>

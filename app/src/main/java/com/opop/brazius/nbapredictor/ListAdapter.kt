@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +12,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import java.util.*
+import com.google.gson.Gson
+
+
 
 
 class ListAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -168,14 +171,18 @@ class ListAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
                     }
                     eastDone = true
                     if(westDone && eastDone){
-                        val intent = Intent(context, PlayoffActivity::class.java)
-                        intent.putParcelableArrayListExtra("data",dataSet)
-                        context.startActivity(intent)
+                       startPlayoffActivity()
                     }
                     notifyDataSetChanged()
                 }
             }
         }
+    }
+
+    fun startPlayoffActivity(){
+        val intent = Intent(context, PlayoffActivity::class.java)
+        intent.putParcelableArrayListExtra("data",dataSet)
+        context.startActivity(intent)
     }
 
     fun changeWestPlaces(holder: ViewHolder, pos: Int) {
@@ -208,9 +215,7 @@ class ListAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerV
                     }
                     westDone = true
                     if(westDone && eastDone){
-                        val intent = Intent(context, PlayoffActivity::class.java)
-                        intent.putParcelableArrayListExtra("data",dataSet)
-                        context.startActivity(intent)
+                        startPlayoffActivity()
                     }
                     notifyDataSetChanged()
                 }

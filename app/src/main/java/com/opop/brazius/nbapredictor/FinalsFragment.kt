@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
@@ -73,20 +73,25 @@ class FinalsFragment : Fragment() {
             ivChamp?.visibility = View.VISIBLE
             tvChamp?.text = String.format("NBA Champion\n%s", nbaChampion)
             tvChamp?.visibility = View.VISIBLE
+            tvRate?.visibility = View.INVISIBLE
+            ivRate?.visibility = View.INVISIBLE
+            tvShare?.visibility = View.INVISIBLE
+            ivShare?.visibility = View.INVISIBLE
+            tvClickAd?.visibility = View.INVISIBLE
+            val adView = activity!!.findViewById<AdView>(R.id.adView)
+            adView.visibility = View.INVISIBLE
             Handler().postDelayed({
-                tvRate?.visibility = View.INVISIBLE
-                ivRate?.visibility = View.INVISIBLE
-                val view = activity!!.findViewById<AdView>(R.id.adView)
-                view.visibility = View.INVISIBLE
                 screenshotListener?.sendFinalsScreenshot(view!!)
-                view.visibility = View.VISIBLE
+                adView.visibility = View.VISIBLE
+                tvShare?.visibility = View.VISIBLE
+                ivShare?.visibility = View.VISIBLE
                 tvRate?.visibility = View.VISIBLE
                 ivRate?.visibility = View.VISIBLE
-                listener?.showConfetti()
-            }, 300)
+                tvClickAd?.visibility = View.VISIBLE
 
-            tvShare?.visibility = View.VISIBLE
-            ivShare?.visibility = View.VISIBLE
+                listener?.showConfetti()
+            }, 100)
+
 
         }
     }
@@ -103,6 +108,7 @@ class FinalsFragment : Fragment() {
     var score1: TextView? = null
     var score2: TextView? = null
     var tvChamp: TextView? = null
+    var tvClickAd: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -130,6 +136,7 @@ class FinalsFragment : Fragment() {
         tvRate = view.findViewById(R.id.tv_rate)
         ivShare = view.findViewById(R.id.iv_share)
         tvShare = view.findViewById(R.id.tv_share)
+        tvClickAd = view.findViewById(R.id.textView3)
         val typeFace = Typeface.createFromAsset(context!!.assets, "fonts/radioland.ttf")
         val typeFace2 = Typeface.createFromAsset(context!!.assets, "fonts/arcade.otf")
         score1?.typeface = typeFace
@@ -180,8 +187,12 @@ class FinalsFragment : Fragment() {
                 makeImgBlurry(iv1)
                 score?.text = "4"
                 score2?.text = "0"
-                score?.setTextColor(Color.BLACK)
-                showViews()
+                if(iv1?.tag != null) {
+                    val finals = nbaChampion + " 4 : " + score2?.text.toString() + " " + iv1.tag as String + "\n\n NBA Champion " + nbaChampion
+                    Prefs.setNbaFinals(activity!!, finals)
+                    score?.setTextColor(Color.BLACK)
+                    showViews()
+                }
             }
         } else {
             score?.text = "0"
@@ -196,11 +207,11 @@ class FinalsFragment : Fragment() {
 
 
     fun showDialog(iv: ImageView?) {
-        val dialog = Dialog(activity)
+        val dialog = Dialog(activity!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog)
-        dialog.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
 
         val b0 = dialog.findViewById<Button>(R.id.button)
         val b1 = dialog.findViewById<Button>(R.id.button2)

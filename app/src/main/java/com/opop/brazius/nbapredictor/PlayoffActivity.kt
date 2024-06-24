@@ -1,19 +1,20 @@
 package com.opop.brazius.nbapredictor
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.preference.PreferenceManager
-import android.support.design.widget.TabLayout
-import android.support.v4.content.FileProvider
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
+import androidx.annotation.RequiresApi
+import com.google.android.material.tabs.TabLayout
+import androidx.core.content.FileProvider
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.PixelCopy
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -57,6 +58,7 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
     private fun shareImageUri(uri: Uri?) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
+        intent.putExtra(Intent.EXTRA_TEXT,Prefs.getWinners(this));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.type = "image/png"
         startActivity(intent)
@@ -70,7 +72,7 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
             imagesFolder.mkdirs()
             val file = File(imagesFolder, "saved_img.png")
             val stream = FileOutputStream(file)
-            image.compress(Bitmap.CompressFormat.PNG, 95, stream)
+            image.compress(Bitmap.CompressFormat.PNG, 92, stream)
             stream.flush()
             stream.close()
             uri = FileProvider.getUriForFile(this, "com.opop.brazius", file)
@@ -88,6 +90,30 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
         val bitmap = Bitmap.createBitmap(screenView.drawingCache)
         screenView.isDrawingCacheEnabled = false
         return bitmap
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun saveScreenshot(view: View, whichView: Int) {
+        val window = (view.context as PlayoffActivity).window
+        if (window != null) {
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val locationOfViewInWindow = IntArray(2)
+            view.getLocationInWindow(locationOfViewInWindow)
+            try {
+                PixelCopy.request(window, Rect(locationOfViewInWindow[0], locationOfViewInWindow[1], locationOfViewInWindow[0] + view.width, locationOfViewInWindow[1] + view.height), bitmap, { copyResult ->
+                    if (copyResult == PixelCopy.SUCCESS) {
+                        when (whichView) {
+                            1 -> b1 = bitmap
+                            2 -> b2 = bitmap
+                            else -> b3 = bitmap
+                        }
+                    }
+                    // possible to handle other result codes ...
+                }, Handler())
+            } catch (e: IllegalArgumentException) {
+                // PixelCopy may throw IllegalArgumentException, make sure to handle it
+            }
+        }
     }
 
     override fun sendWestLogo(id: Drawable, teamName: String) {
@@ -117,22 +143,22 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playoff)
-        MobileAds.initialize(this, getString(R.string.ad_id))
+        MobileAds.initialize(this, getString(R.string.appId))
         mAdView = findViewById<AdView>(R.id.adView)
         val adRequest = AdRequest.Builder()
                 .build()
         mAdView?.loadAd(adRequest)
-        val data = intent.extras.getParcelableArrayList<Team>("data")
+        val data = intent?.extras?.getParcelableArrayList<Team>("data")
 
         val eastTeams = ArrayList<Team>()
         val westTeams = ArrayList<Team>()
         for (i in 1..15) {
-            if (data[i].place != 0) {
+            if (data!![i].place != 0) {
                 eastTeams.add(data[i])
             }
         }
         for (i in 17..31) {
-            if (data[i].place != 0) {
+            if (data!![i].place != 0) {
                 westTeams.add(data[i])
             }
         }
@@ -147,6 +173,10 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
         val gson = Gson()
         westTeams.sortBy { it.place }
         eastTeams.sortBy { it.place }
+        Prefs.setEastPlaces(this,eastTeams[0].name,eastTeams[1].name,eastTeams[2].name,eastTeams[3].name,eastTeams[4].name,eastTeams[5].name,eastTeams[6].name,eastTeams[7].name)
+        Prefs.setWestPlaces(this,westTeams[0].name,westTeams[1].name,westTeams[2].name,westTeams[3].name,westTeams[4].name,westTeams[5].name,westTeams[6].name,westTeams[7].name)
+
+
         val json = gson.toJson(eastTeams)
         val json2 = gson.toJson(westTeams)
 
@@ -163,15 +193,27 @@ class PlayoffActivity : AppCompatActivity(), WinnerListener, FinalsFragment.Shar
     }
 
     override fun sendFinalsScreenshot(view: View) {
-        b1 = getScreenShot(view)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+            saveScreenshot(view,1)
+        }else {
+            b1 = getScreenShot(view)
+        }
     }
 
     override fun sendEastScreenshot(view: View) {
-        b2 = getScreenShot(view)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+            saveScreenshot(view,2)
+        }else {
+            b2 = getScreenShot(view)
+        }
     }
 
     override fun sendWestScreenshot(view: View) {
-        b3 = getScreenShot(view)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
+            saveScreenshot(view,3)
+        }else {
+            b3 = getScreenShot(view)
+        }
     }
 
     public override fun onPause() {

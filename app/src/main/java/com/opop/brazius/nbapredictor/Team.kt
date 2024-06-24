@@ -14,11 +14,11 @@ data class Team(var isHeader: Boolean = true) : Parcelable {
     var visibility = View.GONE
 
     constructor(parcel: Parcel) : this() {
-        name = parcel.readString()
+        name = parcel.readString()!!
         logo = parcel.readInt()
         place = parcel.readInt()
-        isOut = parcel.readString()
-        abbr = parcel.readString()
+        isOut = parcel.readString()!!
+        abbr = parcel.readString()!!
         visibility = parcel.readInt()
         isHeader = parcel.readByte() != 0.toByte()
     }

@@ -7,7 +7,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
@@ -119,9 +119,9 @@ class WestFragment : Fragment() {
         setLogos()
     }
 
-    fun setLogos(){
+    fun setLogos() {
         val gson = Gson()
-        val response = PreferenceManager.getDefaultSharedPreferences(context).getString("west","")
+        val response = PreferenceManager.getDefaultSharedPreferences(context).getString("west", "")
         data = gson.fromJson<ArrayList<Team>>(response,
                 object : TypeToken<List<Team>>() {}.type)
 
@@ -224,7 +224,7 @@ class WestFragment : Fragment() {
 
     fun winnerLogic(iv1: ImageView?, iv2: ImageView?,
                     score: TextView?, score2: TextView?, abbr: TextView?, abbr2: TextView?,
-                    ivNext: ImageView?, nextScore: TextView?,scoreFinal: TextView?, nextAbbr: TextView?, ivFinal: ImageView?, abbrFinal: TextView?) {
+                    ivNext: ImageView?, nextScore: TextView?, scoreFinal: TextView?, nextAbbr: TextView?, ivFinal: ImageView?, abbrFinal: TextView?) {
         if (!isBlurry(iv1)) {
             if (!isBlurry(iv2)) {
                 makeImgBlurry(iv1)
@@ -243,12 +243,13 @@ class WestFragment : Fragment() {
                     nextAbbr?.text = abbr?.text
                     nextAbbr?.visibility = View.VISIBLE
                 } else {
-                    listener?.sendWestLogo(iv2!!.drawable,iv2.tag as String)
-                    Handler().postDelayed( {
-                        val view = activity!!.findViewById<AdView>(R.id.adView)
-                        view.visibility = View.INVISIBLE
+                    listener?.sendWestLogo(iv2!!.drawable, iv2.tag as String)
+                    checkWinnersAndStoreToPrefs()
+                    Handler().postDelayed({
+                        val adView = activity!!.findViewById<AdView>(R.id.adView)
+                        adView.visibility = View.INVISIBLE
                         screenshotListener?.sendWestScreenshot(view!!)
-                        view.visibility = View.VISIBLE
+                        adView.visibility = View.VISIBLE
                     }, 300)
                 }
             }
@@ -256,7 +257,7 @@ class WestFragment : Fragment() {
             score?.text = "0"
             score?.setTextColor(Color.parseColor("#808080"))
             abbr?.setTextColor(Color.parseColor("#808080"))
-            if (!isBlurry(iv2)){
+            if (!isBlurry(iv2)) {
                 makeImgClear(iv1)
             }
             if (ivNext != null) {
@@ -277,12 +278,98 @@ class WestFragment : Fragment() {
     }
 
 
+    fun checkWinnersAndStoreToPrefs() {
+        var winner18: String = ""
+        var winner27: String = ""
+        var winner36: String = ""
+        var winner45: String = ""
+        var winner18str: String = ""
+        var winner27str: String = ""
+        var winner36str: String = ""
+        var winner45str: String = ""
+        var winnersemi1: String = ""
+        var winnersemi2: String = ""
+        var winnersemi1str: String = ""
+        var winnersemi2str: String = ""
+        var winnerfinal: String = ""
+
+        if (iv1?.alpha == 1f && iv2?.alpha != 1f) {
+            winner18str = data!![0].name
+            winner18 = data!![0].name + " " + score1?.text.toString()
+            winner18 += " : " + score2?.text.toString() + " " + data!![7].name
+        } else if (iv2?.alpha == 1f && iv1?.alpha != 1f) {
+            winner18str = data!![7].name
+            winner18 = data!![7].name + " " + score2?.text.toString()
+            winner18 += " : " + score1?.text.toString() + " " + data!![0].name
+        }
+
+        if (iv3?.alpha == 1f && iv4?.alpha != 1f) {
+            winner27str = data!![3].name
+            winner27 = data!![3].name + " " + score3?.text.toString()
+            winner27 += " : " + score4?.text.toString() + " " + data!![4].name
+        } else if (iv4?.alpha == 1f && iv3?.alpha != 1f) {
+            winner27str = data!![4].name
+            winner27 = data!![4].name + " " + score4?.text.toString()
+            winner27 += " : " + score3?.text.toString() + " " + data!![3].name
+        }
+
+        if (iv5?.alpha == 1f && iv6?.alpha != 1f) {
+            winner36str = data!![2].name
+            winner36 = data!![2].name + " " + score5?.text.toString()
+            winner36 += " : " + score6?.text.toString() + " " + data!![5].name
+        } else if (iv6?.alpha == 1f && iv5?.alpha != 1f) {
+            winner36str = data!![5].name
+            winner36 = data!![5].name + " " + score6?.text.toString()
+            winner36 += " : " + score5?.text.toString() + " " + data!![2].name
+        }
+
+        if (iv7?.alpha == 1f && iv8?.alpha != 1f) {
+            winner45str = data!![1].name
+            winner45 = data!![1].name + " " + score7?.text.toString()
+            winner45 += " : " + score8?.text.toString() + " " + data!![6].name
+        } else if (iv8?.alpha == 1f && iv7?.alpha != 1f) {
+            winner45str = data!![6].name
+            winner45 = data!![6].name + " " + score8?.text.toString()
+            winner45 += " : " + score7?.text.toString() + " " + data!![1].name
+        }
+
+        if (iv9?.alpha == 1f && iv10?.alpha != 1f) {
+            winnersemi1str = winner18str
+            winnersemi1 = winner18str + " " + score9?.text.toString()
+            winnersemi1 += " : " + score10?.text.toString() + " " + winner27str
+        } else if (iv10?.alpha == 1f && iv9?.alpha != 1f) {
+            winnersemi1str = winner27str
+            winnersemi1 = winner27str + " " + score10?.text.toString()
+            winnersemi1 += " : " + score9?.text.toString() + " " + winner18str
+        }
+
+        if (iv11?.alpha == 1f && iv12?.alpha != 1f) {
+            winnersemi2str = winner36str
+            winnersemi2 = winner36str + " " + score11?.text.toString()
+            winnersemi2 += " : " + score12?.text.toString() + " " + winner45str
+        } else if (iv12?.alpha == 1f && iv11?.alpha != 1f) {
+            winnersemi2str = winner45str
+            winnersemi2 = winner45str + " " + score12?.text.toString()
+            winnersemi2 += " : " + score11?.text.toString() + " " + winner36str
+        }
+
+        if (iv13?.alpha == 1f && iv14?.alpha != 1f) {
+            winnerfinal = winnersemi1str + " " + score13?.text.toString()
+            winnerfinal += " : " + score14?.text.toString() + " " + winnersemi2str
+        } else if (iv14?.alpha == 1f && iv13?.alpha != 1f) {
+            winnerfinal = winnersemi2str + " " + score14?.text.toString()
+            winnerfinal += " : " + score13?.text.toString() + " " + winnersemi1str
+        }
+
+        Prefs.setWestRound1(activity!!, winner18, winner27, winner36, winner45, winnersemi1, winnersemi2, winnerfinal);
+    }
+
     fun showDialog(iv: ImageView?) {
-        val dialog = Dialog(activity)
+        val dialog = Dialog(activity!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.dialog)
-        dialog.window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
 
         val b0 = dialog.findViewById<Button>(R.id.button)
         val b1 = dialog.findViewById<Button>(R.id.button2)
@@ -337,10 +424,11 @@ class WestFragment : Fragment() {
 
     var listener: WinnerListener? = null
     var screenshotListener: FragmentScreenshotListener? = null
-    fun setScreenshotListener(){
+    fun setScreenshotListener() {
         screenshotListener = activity as FragmentScreenshotListener
     }
-    fun setListener(){
+
+    fun setListener() {
         listener = activity as WinnerListener
     }
 

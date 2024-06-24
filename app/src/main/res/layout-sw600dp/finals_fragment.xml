@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="60dp">
+
+    <ImageView
+        android:id="@+id/iv_left"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/mid"
+        android:visibility='invisible'
+        app:srcCompat="@drawable/bulls" />
+
+    <ImageView
+        android:id="@+id/iv_right"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/iv_left"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/blazers" />
+
+    <View
+        android:id="@+id/mid"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="45dp"
+        android:layout_toEndOf="@+id/iv_right"
+        android:textSize="46sp" />
+
+    <TextView
+        android:id="@+id/tv_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="45dp"
+        android:layout_toStartOf="@+id/iv_left"
+        android:textSize="46sp" />
+
+    <ImageView
+        android:id="@+id/iv_champ"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/iv_left"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/heat" />
+
+    <TextView
+        android:id="@+id/tv_champ"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/iv_left"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_toStartOf="@+id/iv_champ"
+        android:gravity="center"
+        android:text="NBA Champion\n Miami Heat"
+        android:textColor="@android:color/black"
+        android:textSize="36sp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/iv_rate"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/tv_share"
+        android:layout_marginStart="50dp"
+        android:layout_toEndOf="@+id/iv_champ"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/rate_press"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/iv_share"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/tv_rate"
+        android:layout_toEndOf="@+id/iv_rate"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/share_press"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tv_rate"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/iv_rate"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="Rate app"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tv_share"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_share"
+        android:layout_alignStart="@+id/iv_share"
+        android:gravity="center"
+        android:text="Share predictions"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_rate"
+        android:layout_toEndOf="@+id/iv_right"
+        android:text="If you enjoyed the app click on the ad to support developer :)"
+        android:textSize="14sp"
+        android:visibility="invisible" />
+</RelativeLayout>
